@@ -58,6 +58,7 @@ convertLeterToNumber('a',3).
 convertLeterToNumber('b',2).
 convertLeterToNumber('c',1).
 
+% apanhar a linha
 checkSource([Line|_], X, Y, Result):-
                         Y is 3, 
                         checkSourceAux(Line, X, Result).
@@ -65,7 +66,7 @@ checkSource([Line|_], X, Y, Result):-
 checkSource([_|Tab], X, Y, Result):-
                         NewY is Y + 1, 
                         checkSource(Tab, X, NewY, Result).
-
+% apanhar a peça
 checkSourceAux([Piece|_], X, Result):-
                     ((Piece \== 'e' , X is 1) -> Result=1; Result=0).
 
@@ -74,6 +75,7 @@ checkSourceAux([_|Line], X, Result):-
                             checkSourceAux(Line, NewX, Result).
 
 %%%%%%%%%%%%%%%%
+% ver a linha do tabuleiro
 checkBoard([Line|_],Id, X, Y, Result):-
                         Y is 3, 
                         checkBoardAux(Line,Id, X, Result).
@@ -82,6 +84,7 @@ checkBoard([_|Tab],Id, X, Y, Result):-
                         NewY is Y + 1, 
                         checkBoard(Tab,Id, X, NewY, Result).
 
+% ver o conjunto de 3 peças
 checkBoardAux([Pieces|_],Id,  X, Result):-
                     X is 1,
                     checkBoardAuxPiece(Pieces, Id, Result).
@@ -89,7 +92,7 @@ checkBoardAux([Pieces|_],Id,  X, Result):-
 checkBoardAux([_|Line],Id, X, Result):-
                             NewX is X-1,
                             checkBoardAux(Line,Id, NewX, Result).
-
+% ver a peça 'r'
 checkBoardAuxPiece([Piece|_], Id, Result):-
                     ((Piece == 'e' , Id is 1) -> Result=1; Result=0).
 
@@ -101,16 +104,18 @@ checkBoardAuxPiece([_|Pieces], Id, Result):-
 
 
 joga(Peca, Source, SourceEnd, Tab, TabEnd):-
-                verifica(Source, Result, Id, Y),      
-                (Result is 1 -> verificaBoard(Tab, X, Y, Id, Result), 
-                                removePeca(Source, Y, Id, SourceEnd),
-                                inserePeca(Tab, X, Y, Id, Peca,TabEnd)).
+                repeat,
+                verifica(Source, Result, Id, Y),!, 
+                            repeat,
+                            (Result is 1 -> verificaBoard(Tab, X, Y, Id, Result), 
+                                            removePeca(Source, Y, Id, SourceEnd),
+                                            inserePeca(Tab, X, Y, Id, Peca,TabEnd)).
 
 verifica(Source, Result, X, Y):-
                 write('coordenadas da peca a remover!'),nl,
                 write('insira coordenada X'),nl,
                 read(X),  
-                valid(X),        
+                valid(X),       
                 write('insira coordenada Y'),nl,
                 read(Y), 
                 valid(Y),             
@@ -124,11 +129,11 @@ verificaBoard(Tab, X, Y, Id, Result):-
                 valid(X),        
                 write('insira coordenada Y'),nl,
                 read(Y), 
-                valid(Y),            
+                valid(Y),           
                 checkBoard(Tab, Id, X, Y, Result).
 
 valid(1).
 valid(2).
 valid(3).
-valid(_):-write('invalid'), fail.
+valid(_):- write('invalid'),nl,fail.
 
