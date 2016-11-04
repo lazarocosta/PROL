@@ -39,7 +39,7 @@ printboard([],[],[], _).
 
 printBottom:-
 	shortSeparation,
-	write('                       A             B             C').
+	write('                       A             B            C').
 
 separation:- write('    --------------------------------------------------------------------'), 
                 nl.
@@ -52,16 +52,11 @@ traduz('r'):- write('R').
 traduz('b'):- write('B').
 traduz('e'):- write(' ').
 
-display:-
-        top(A),
-        left(B),
-        center(C),
-        right(D),
-        bottom(E),
-        shortSeparation,
-        printboardTop(A),
-        separation,
-        printboard(B,C,D,3),
-        separation,
-        printboardTop(E),
-        printBottom.
+display(Top, Left, Center, Right, Bottom):-
+                shortSeparation,
+                printboardTop(Top),
+                separation,
+                printboard(Left, Center, Right, 3),
+                separation,
+                printboardTop(Bottom),
+                printBottom.
