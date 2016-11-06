@@ -31,8 +31,7 @@ removePeca([Line|Tab], Y, Id, [Line|Res]):-
                         NewY is Y + 1,
                         removePeca(Tab, NewY, Id, Res).
                         
-removePeca([Line|Tab], Y, Id, Res):-
-                         Y is 3,
+removePeca([Line|Tab], 3, Id, Res):-
                          setPeca(Id, 'e', Line, Nova),
                          Res = [Nova|Tab].
 
@@ -40,8 +39,7 @@ inserePeca([Line|Tab], X, Y, Id, Peca, [Line|Res]):-
                         NewY is Y + 1,
                         inserePeca(Tab, X, NewY, Id, Peca, Res).
 
-inserePeca([Line|Tab], X, Y, Id, Peca, Res):-
-                        Y is 3, 
+inserePeca([Line|Tab], X, 3, Id, Peca, Res):-
                         inserePecaAux(Line, X, Id, Peca, Nova),
                         Res = [Nova|Tab].
 
@@ -49,8 +47,7 @@ inserePecaAux([Line|Tab], X, Id, Peca, [Line|Res]):-
                         NewX is X - 1,
                         inserePecaAux(Tab, NewX, Id, Peca, Res).
 
-inserePecaAux([Line|Tab], X, Id, Peca,[ Res|Tab]):-
-                        X is 1,
+inserePecaAux([Line|Tab], 1, Id, Peca,[ Res|Tab]):-
                         setPeca(Id, Peca, Line, Nova),
                         Res = Nova.
 
@@ -59,59 +56,58 @@ convertLeterToNumber('b',2).
 convertLeterToNumber('c',1).
 
 % apanhar a linha
-checkSource([Line|_], X, Y, Result):-
+checkSource([Line|_], X, Y):-
                         Y is 3, 
-                        checkSourceAux(Line, X, Result).
+                        checkSourceAux(Line, X).
 
-checkSource([_|Tab], X, Y, Result):-
+checkSource([_|Tab], X, Y):-
                         NewY is Y + 1, 
-                        checkSource(Tab, X, NewY, Result).
+                        checkSource(Tab, X, NewY).
 % apanhar a peça
-checkSourceAux([Piece|_], X, Result):-
-                    ((Piece \== 'e' , X is 1) -> Result=1; Result=0).
+checkSourceAux([Piece|_], 1):-
+                    ((Piece == 'e') -> fail; true).
 
-checkSourceAux([_|Line], X, Result):-
+checkSourceAux([_|Line], X):-
                             NewX is X-1,
-                            checkSourceAux(Line, NewX, Result).
+                            checkSourceAux(Line, NewX).
 
 %%%%%%%%%%%%%%%%
 % ver a linha do tabuleiro
-checkBoard([Line|_],Id, X, Y, Result):-
+checkBoard([Line|_],Id, X, Y):-
                         Y is 3, 
-                        checkBoardAux(Line,Id, X, Result).
+                        checkBoardAux(Line,Id, X).
 
-checkBoard([_|Tab],Id, X, Y, Result):-
+checkBoard([_|Tab],Id, X, Y):-
                         NewY is Y + 1, 
-                        checkBoard(Tab,Id, X, NewY, Result).
+                        checkBoard(Tab,Id, X, NewY).
 
 % ver o conjunto de 3 peças
-checkBoardAux([Pieces|_],Id,  X, Result):-
+checkBoardAux([Pieces|_],Id,  X):-
                     X is 1,
-                    checkBoardAuxPiece(Pieces, Id, Result).
+                    checkBoardAuxPiece(Pieces, Id).
 
-checkBoardAux([_|Line],Id, X, Result):-
+checkBoardAux([_|Line],Id, X):-
                             NewX is X-1,
-                            checkBoardAux(Line,Id, NewX, Result).
+                            checkBoardAux(Line,Id, NewX).
 % ver a peça 'r'
-checkBoardAuxPiece([Piece|_], Id, Result):-
-                    ((Piece == 'e' , Id is 1) -> Result=1; Result=0).
+checkBoardAuxPiece([Piece|_], 1):-
+                    ((Piece \== 'e') -> fail; true).
 
-checkBoardAuxPiece([_|Pieces], Id, Result):-
+checkBoardAuxPiece([_|Pieces], Id):-
                             NewId is Id-1,
-                            checkBoardAuxPiece(Pieces, NewId, Result).
+                            checkBoardAuxPiece(Pieces, NewId).
 
 %%%%%%%%%%
 
 
 joga(Peca, Source, SourceEnd, Tab, TabEnd):-
-                repeat,
-                verifica(Source, Result, Id, Y),!, 
-                            repeat,
-                            (Result is 1 -> verificaBoard(Tab, X, Y, Id, Result), 
-                                            removePeca(Source, Y, Id, SourceEnd),
-                                            inserePeca(Tab, X, Y, Id, Peca,TabEnd)).
+                verifica(Source, Id, Y),!, 
+                 verificaBoard(Tab, Xnovo, Ynovo, Id), 
+                 removePeca(Source, Y, Id, SourceEnd),
+                 inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd).
 
-verifica(Source, Result, X, Y):-
+verifica(Source, X, Y):-
+                repeat,
                 write('coordenadas da peca a remover!'),nl,
                 write('insira coordenada X'),nl,
                 read(X),  
@@ -119,18 +115,19 @@ verifica(Source, Result, X, Y):-
                 write('insira coordenada Y'),nl,
                 read(Y), 
                 valid(Y),             
-                checkSource(Source, X, Y, Result).
+                checkSource(Source, X, Y).
 
 
-verificaBoard(Tab, X, Y, Id, Result):-
+verificaBoard(Tab, X, Y, Id):-
+                repeat,
                 write('coordenadas as novas coordenadas da peca'),nl,
                 write('insira coordenada X'),nl,
-                read(X),  
+                read(X), 
                 valid(X),        
                 write('insira coordenada Y'),nl,
-                read(Y), 
+                read(Y),
                 valid(Y),           
-                checkBoard(Tab, Id, X, Y, Result).
+                checkBoard(Tab, Id, X, Y).
 
 valid(1).
 valid(2).
