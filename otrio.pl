@@ -1,21 +1,7 @@
 :-use_module(library(lists)).
+:- dynamic left/1, right/1, top/1, bottom/1, center/1, letra/1, board/2.
 :- include('testes.pl').
 :- include('board.pl').
-
-left([ [r, r, r], [r, r, r], [r, r, r] ]).
-
-right([ [b, b, b], [b, b, b], [b, b, b] ]).
-
-top([ [g, g, g], [g, g, g], [g, g, g] ]).
-
-bottom([ [p, p, p], [p, p, p], [p, p, p] ]).
-
-center([ [ [e, e, e], [e, e, e], [e, e, e] ],
-         [ [e, e, e], [e, e, e], [e, e, e] ],
-         [ [e, e, e], [e, e, e], [e, e, e] ] ]).
-
-board(center, top, right, bottom, left).
-
 
 getPeca(Linha, Coluna, Posicao, Peca):-
                 centro(A),
@@ -56,8 +42,7 @@ convertLeterToNumber('b',2).
 convertLeterToNumber('c',1).
 
 % apanhar a linha
-checkSource([Line|_], X, Y):-
-                        Y is 3, 
+checkSource([Line|_], X, 3):-
                         checkSourceAux(Line, X).
 
 checkSource([_|Tab], X, Y):-
@@ -73,8 +58,7 @@ checkSourceAux([_|Line], X):-
 
 %%%%%%%%%%%%%%%%
 % ver a linha do tabuleiro
-checkBoard([Line|_],Id, X, Y):-
-                        Y is 3, 
+checkBoard([Line|_],Id, X, 3):-
                         checkBoardAux(Line,Id, X).
 
 checkBoard([_|Tab],Id, X, Y):-
@@ -82,8 +66,7 @@ checkBoard([_|Tab],Id, X, Y):-
                         checkBoard(Tab,Id, X, NewY).
 
 % ver o conjunto de 3 peças
-checkBoardAux([Pieces|_],Id,  X):-
-                    X is 1,
+checkBoardAux([Pieces|_],Id, 1):-
                     checkBoardAuxPiece(Pieces, Id).
 
 checkBoardAux([_|Line],Id, X):-
@@ -101,21 +84,21 @@ checkBoardAuxPiece([_|Pieces], Id):-
 
 
 joga(Peca, Source, SourceEnd, Tab, TabEnd):-
-                verifica(Source, Id, Y),!, 
-                 verificaBoard(Tab, Xnovo, Ynovo, Id), 
+                verifica(Source, Id, Y, Peca),!, 
+                 verificaBoard(Tab, Xnovo, Ynovo, Id),
                  removePeca(Source, Y, Id, SourceEnd),
                  inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd).
 
-verifica(Source, X, Y):-
+verifica(Source, X, Y, Peca):-
                 repeat,
                 write('coordenadas da peca a remover!'),nl,
                 write('insira coordenada X'),nl,
-                read(X),  
-                valid(X),       
+                read(X),
+                valid(X),   
                 write('insira coordenada Y'),nl,
-                read(Y), 
-                valid(Y),             
-                checkSource(Source, X, Y).
+                ((Peca=='p'; Peca=='g') -> read(Y1), valid(Y1),convert(Y1, Y);
+                                           read(Y), valid(Y)),
+                 checkSource(Source, X, Y).         
 
 
 verificaBoard(Tab, X, Y, Id):-
@@ -129,6 +112,9 @@ verificaBoard(Tab, X, Y, Id):-
                 valid(Y),           
                 checkBoard(Tab, Id, X, Y).
 
+convert(1,3).
+convert(3,1).
+convert(2,2).
 valid(1).
 valid(2).
 valid(3).
