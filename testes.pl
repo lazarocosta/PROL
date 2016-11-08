@@ -10,13 +10,13 @@ center([ [ [e, e, e], [e, e, e], [e, e, e] ],
          [ [e, e, e], [e, e, e], [e, e, e] ],
          [ [e, e, e], [e, e, e], [e, e, e] ] ]).
 
-board('l',[ [r, r, r], [r, r, r], [r, r, r] ]). %left
+board('r',[ [r, r, r], [r, r, r], [r, r, r] ]). %left
 
-board('r',[ [b, b, b], [b, b, b], [b, b, b] ]). %right
+board('b',[ [b, b, b], [b, b, b], [b, b, b] ]). %right
 
-board('t',[ [g, g, g], [g, g, g], [g, g, g] ]).%top
+board('g',[ [g, g, g], [g, g, g], [g, g, g] ]).%top
 
-board('b',[ [p, p, p], [p, p, p], [p, p, p] ]).%bottom
+board('p',[ [p, p, p], [p, p, p], [p, p, p] ]).%bottom
 
 board('c',[ [ [e, e, e], [e, e, e], [e, e, e] ],%center
           [ [e, e, e], [e, e, e], [e, e, e] ],
@@ -34,26 +34,30 @@ jogador('g',2).
 jogador('b',1).
 jogador('p',2).
 
-novo:- 
+novo:-
         repeat,
-                board('r',R),
-                board('l',L),
-                board('t',T),
-                board('b',B),
+              retract(board('c', C)),
+              retract(board('r', L)),
+              retract(board('b', R)),
+              retract(board('g', T)),
+              retract(board('p', B)),
 
-                retract(letra(Letra)),
-                retract(board(Letra, Board)),
-                retract(board('c', C)),
+               display(T, L, C, R, B),
 
-                display(T, L, C, R, B),
+               assert(board('r', L)),
+               assert(board('b', R)),
+               assert(board('g', T)),
+               assert(board('p', B)),
 
-                joga(Letra, Board, Board1, C, Cend),
-                proximaLetra(Letra, Proxima),!,
+               retract(letra(Letra)),
+               retract(board(Letra, Board)),
+               once(joga(Letra, Board, Board1, C, Cend)),
+               proximaLetra(Letra, Proxima),
 
-                assert(board(Letra, Board1)),
-                assert(board('c', Cend)),
-                assert(letra(Proxima)),
-                fail.
+               assert(board(Letra, Board1)),
+               assert(board('c', Cend)),
+               assert(letra(Proxima)),
+               fail.
 
 
 game:-
@@ -83,4 +87,4 @@ game:-
          write('jogador 2'),nl,
          write('letra P'), nl,
          joga('p', B, Bend,  Cend2, Cend3),
-         display(Tend, Lend, Cend3, Rend, Bend).    
+         display(Tend, Lend, Cend3, Rend, Bend).

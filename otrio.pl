@@ -16,7 +16,7 @@ setPeca(3, Peca, [A, B, _], [A, B, Peca]).
 removePeca([Line|Tab], Y, Id, [Line|Res]):-
                         NewY is Y + 1,
                         removePeca(Tab, NewY, Id, Res).
-                        
+
 removePeca([Line|Tab], 3, Id, Res):-
                          setPeca(Id, 'e', Line, Nova),
                          Res = [Nova|Tab].
@@ -46,7 +46,7 @@ checkSource([Line|_], X, 3):-
                         checkSourceAux(Line, X).
 
 checkSource([_|Tab], X, Y):-
-                        NewY is Y + 1, 
+                        NewY is Y + 1,
                         checkSource(Tab, X, NewY).
 % apanhar a peça
 checkSourceAux([Piece|_], 1):-
@@ -62,7 +62,7 @@ checkBoard([Line|_],Id, X, 3):-
                         checkBoardAux(Line,Id, X).
 
 checkBoard([_|Tab],Id, X, Y):-
-                        NewY is Y + 1, 
+                        NewY is Y + 1,
                         checkBoard(Tab,Id, X, NewY).
 
 % ver o conjunto de 3 peças
@@ -84,39 +84,53 @@ checkBoardAuxPiece([_|Pieces], Id):-
 
 
 joga(Peca, Source, SourceEnd, Tab, TabEnd):-
-                verifica(Source, Id, Y, Peca),!, 
+                verifica(Source, Id, Y, Peca),!,
                  verificaBoard(Tab, Xnovo, Ynovo, Id),
                  removePeca(Source, Y, Id, SourceEnd),
                  inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd).
 
 verifica(Source, X, Y, Peca):-
                 repeat,
+                jogador(Peca, Numero),
+                format('jogador ~d ~n',[Numero]),
+                peca(Peca, Peca1),
+                format('Peca ~s ~n',[Peca1]),
                 write('coordenadas da peca a remover!'),nl,
                 write('insira coordenada X'),nl,
                 read(X),
-                valid(X),   
+                valid(X),
                 write('insira coordenada Y'),nl,
                 ((Peca=='p'; Peca=='g') -> read(Y1), valid(Y1),convert(Y1, Y);
                                            read(Y), valid(Y)),
-                 checkSource(Source, X, Y).         
+                 checkSource(Source, X, Y).
 
 
 verificaBoard(Tab, X, Y, Id):-
                 repeat,
-                write('coordenadas as novas coordenadas da peca'),nl,
+                write('As novas coordenadas da peca'),nl,
                 write('insira coordenada X'),nl,
-                read(X), 
-                valid(X),        
+                read(X),
+                valid(X),
                 write('insira coordenada Y'),nl,
                 read(Y),
-                valid(Y),           
+                valid(Y),
                 checkBoard(Tab, Id, X, Y).
 
 convert(1,3).
 convert(3,1).
 convert(2,2).
+
+jogador('r',1).
+jogador('g',2).
+jogador('b',1).
+jogador('p',2).
+peca('r','R').
+peca('p','P').
+peca('g','G').
+peca('b','B').
+
+
 valid(1).
 valid(2).
 valid(3).
-valid(_):- write('invalid'),nl,fail.
-
+%valid(_):- write('invalid'),nl,fail.
