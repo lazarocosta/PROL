@@ -147,3 +147,4 @@ valid(3).
 semPecas(N1,N2, N3, N4):-
             ((N1=0, N2=0, N3=0, N4=0)->format('Todos os jogadores sem pecas...Empate ~n',[])).
 
+

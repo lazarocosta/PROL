@@ -24,6 +24,7 @@ board('c', 9,[ [ [e, e, e], [e, e, e], [e, e, e] ],%center
 
 letra('r').
 
+
 proximaLetra('r', 'g'). % L--T
 proximaLetra('g', 'b'). % T--R
 proximaLetra('b', 'p'). % R--B

@@ -60,3 +60,4 @@ display(Top, Left, Center, Right, Bottom):-
                 separation,
                 printboardTop(Bottom),
                 printBottom, nl.
+                
