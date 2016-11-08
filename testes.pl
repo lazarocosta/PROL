@@ -10,17 +10,17 @@ center([ [ [e, e, e], [e, e, e], [e, e, e] ],
          [ [e, e, e], [e, e, e], [e, e, e] ],
          [ [e, e, e], [e, e, e], [e, e, e] ] ]).
 
-board('r',[ [r, r, r], [r, r, r], [r, r, r] ]). %left
+board('r', 9,[ [r, r, r], [r, r, r], [r, r, r] ]). %tabuleiro letra/ numero de peças/ tabuleiro
 
-board('b',[ [b, b, b], [b, b, b], [b, b, b] ]). %right
+board('b', 9,[ [b, b, b], [b, b, b], [b, b, b] ]). %right
 
-board('g',[ [g, g, g], [g, g, g], [g, g, g] ]).%top
+board('g', 9,[ [g, g, g], [g, g, g], [g, g, g] ]).%top
 
-board('p',[ [p, p, p], [p, p, p], [p, p, p] ]).%bottom
+board('p', 9,[ [p, p, p], [p, p, p], [p, p, p] ]).%bottom
 
-board('c',[ [ [e, e, e], [e, e, e], [e, e, e] ],%center
-          [ [e, e, e], [e, e, e], [e, e, e] ],
-          [ [e, e, e], [e, e, e], [e, e, e] ] ]).
+board('c', 9,[ [ [e, e, e], [e, e, e], [e, e, e] ],%center
+               [ [e, e, e], [e, e, e], [e, e, e] ],
+               [ [e, e, e], [e, e, e], [e, e, e] ] ]).
 
 letra('r').
 
@@ -33,30 +33,41 @@ jogador('r',1).
 jogador('g',2).
 jogador('b',1).
 jogador('p',2).
+init:-
+        board('r',_, L),
+        board('b',_, R),
+        board('g',_, T),
+        board('p',_, B),
+        board('c',_, C),
+        display(T, L, C, R, B).
+
 
 novo:-
+        init,
         repeat,
-              retract(board('c', C)),
-              retract(board('r', L)),
-              retract(board('b', R)),
-              retract(board('g', T)),
-              retract(board('p', B)),
+               retract(board('c', N, C)),
+               retract(letra(Letra)),
+               retract(board(Letra, Numero, Board)),
+               once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend)),
+               proximaLetra(Letra, Proxima),
+               assert(board(Letra,Nnovo, Board1)),
+               assert(letra(Proxima)),
+
+
+              retract(board('r', N1, L)),
+              retract(board('b', N2, R)),
+              retract(board('g', N3, T)),
+              retract(board('p', N4, B)),
 
                display(T, L, C, R, B),
 
-               assert(board('r', L)),
-               assert(board('b', R)),
-               assert(board('g', T)),
-               assert(board('p', B)),
+               assert(board('r', N1, L)),
+               assert(board('b', N2, R)),
+               assert(board('g', N3, T)),
+               assert(board('p', N4, B)),
 
-               retract(letra(Letra)),
-               retract(board(Letra, Board)),
-               once(joga(Letra, Board, Board1, C, Cend)),
-               proximaLetra(Letra, Proxima),
-
-               assert(board(Letra, Board1)),
-               assert(board('c', Cend)),
-               assert(letra(Proxima)),
+               assert(board('c', N, Cend)),
+  
                fail.
 
 

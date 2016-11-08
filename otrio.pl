@@ -1,5 +1,5 @@
 :-use_module(library(lists)).
-:- dynamic left/1, right/1, top/1, bottom/1, center/1, letra/1, board/2.
+:- dynamic left/1, right/1, top/1, bottom/1, center/1, letra/1, board/3.
 :- include('testes.pl').
 :- include('board.pl').
 
@@ -37,18 +37,16 @@ inserePecaAux([Line|Tab], 1, Id, Peca,[ Res|Tab]):-
                         setPeca(Id, Peca, Line, Nova),
                         Res = Nova.
 
-convertLeterToNumber('a',3).
-convertLeterToNumber('b',2).
-convertLeterToNumber('c',1).
 
-% apanhar a linha
+
+% encontrou a linha
 checkSource([Line|_], X, 3):-
                         checkSourceAux(Line, X).
 
 checkSource([_|Tab], X, Y):-
                         NewY is Y + 1,
                         checkSource(Tab, X, NewY).
-% apanhar a peça
+%verifica Peca
 checkSourceAux([Piece|_], 1):-
                     ((Piece == 'e') -> fail; true).
 
@@ -57,7 +55,7 @@ checkSourceAux([_|Line], X):-
                             checkSourceAux(Line, NewX).
 
 %%%%%%%%%%%%%%%%
-% ver a linha do tabuleiro
+% encontrou a linha do tabuleiro
 checkBoard([Line|_],Id, X, 3):-
                         checkBoardAux(Line,Id, X).
 
@@ -65,29 +63,30 @@ checkBoard([_|Tab],Id, X, Y):-
                         NewY is Y + 1,
                         checkBoard(Tab,Id, X, NewY).
 
-% ver o conjunto de 3 peças
+%encontrou o conjunton das 3 peças
 checkBoardAux([Pieces|_],Id, 1):-
                     checkBoardAuxPiece(Pieces, Id).
 
 checkBoardAux([_|Line],Id, X):-
                             NewX is X-1,
                             checkBoardAux(Line,Id, NewX).
-% ver a peça 'r'
+% verifica a peça
 checkBoardAuxPiece([Piece|_], 1):-
                     ((Piece \== 'e') -> fail; true).
 
 checkBoardAuxPiece([_|Pieces], Id):-
                             NewId is Id-1,
                             checkBoardAuxPiece(Pieces, NewId).
-
 %%%%%%%%%%
 
-
-joga(Peca, Source, SourceEnd, Tab, TabEnd):-
-                verifica(Source, Id, Y, Peca),!,
-                 verificaBoard(Tab, Xnovo, Ynovo, Id),
-                 removePeca(Source, Y, Id, SourceEnd),
-                 inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd).
+joga(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd):-
+                ((N1 == 0)->N2=0, SourceEnd=Source, TabEnd=Tab, nextPlayer(Peca) ;
+                            format('numero de pecas ~d ~n',[N1]),
+                            N2 is N1-1,
+                            verifica(Source, Id, Y, Peca),!,
+                            verificaBoard(Tab, Xnovo, Ynovo, Id),
+                            removePeca(Source, Y, Id, SourceEnd),
+                            inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd)).
 
 verifica(Source, X, Y, Peca):-
                 repeat,
@@ -129,8 +128,22 @@ peca('p','P').
 peca('g','G').
 peca('b','B').
 
+convertLeterToNumber('a',3).
+convertLeterToNumber('b',2).
+convertLeterToNumber('c',1).
+
+nextPlayer(Peca):-
+                jogador(Peca, Numero),
+                format('jogador ~d ~n',[Numero]),
+                peca(Peca, Peca1),
+                format('Peca ~s ~n',[Peca1]),
+                format('Nao tem pecas disponiveis...proximo jogador ~n',[]).
 
 valid(1).
 valid(2).
 valid(3).
 %valid(_):- write('invalid'),nl,fail.
+
+semPecas(N1,N2, N3, N4):-
+            ((N1=0, N2=0, N3=0, N4=0)->format('Todos os jogadores sem pecas...Empate ~n',[])).
+
