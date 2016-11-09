@@ -1,7 +1,7 @@
 :-use_module(library(lists)).
 :-use_module(library(random)).
 :- dynamic left/1, right/1, top/1, bottom/1, center/1, letra/1, board/3.
-:- include('testes.pl').
+:- include('testes_joao.pl').
 :- include('printBoard.pl').
 :- include('board.pl').
 :- include('player.pl').
