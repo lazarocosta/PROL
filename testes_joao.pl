@@ -17,6 +17,12 @@ bottom([ [p, p, p], [p, p, p], [p, p, p] ]).
 center([ [ [e, e, e], [e, e, e], [e, e, e] ],
          [ [e, e, e], [e, e, e], [e, e, e] ],
          [ [e, e, e], [e, e, e], [e, e, e] ] ]).
+		 
+		 
+getPeca(Centro, Linha, Coluna, Posicao, Peca):-
+                nth1(Linha, Centro, Listlinha),
+                nth1(Coluna, Listlinha, ListPeca),
+                nth1(Posicao, ListPeca, Peca).
 
 
 %%%% tabuleiro inicial base
@@ -177,10 +183,20 @@ center([ [ [e, e, e], [e, e, e], [e, e, e] ],
 
 % TO-DO
 
+% center_iguais_horiz1
+% center_iguais_horiz2
+% center_iguais_vert1
+% center_iguais_vert2
+% center_linha_cresc_hor1
+% center_linha_cresc_hor2
+% center_linha_cresc_diag1
+% center_linha_cresc_diag2
+% center_linha_conc1
+% center_linha_conc2
 
-
-
-
+coluna('A', 1).
+coluna('B', 2).
+coluna('C', 3).
 
 teste_print:-
 	left(L),
@@ -190,3 +206,88 @@ teste_print:-
 	bottom(B),
 	nl,
 	display(T, L, C, R, B), nl.
+
+teste_get:-
+	left(L),
+	center_linha_cresc_diag1(C),
+	top(T),
+	right(R),
+	bottom(B),
+	nl,
+	display(T, L, C, R, B), nl, nl,
+	write('------testing----- '),
+	
+	((check_victory(C, PieceLetter),
+	write('victory -> '),
+	write(PieceLetter),
+	nl);
+	(write('no victory'),
+	nl)),
+	
+	nl,
+	nl.
+	
+check_victory(Center, PieceLetter):-
+	check_victory_horizontal(Center, PieceLetter);
+	(
+	transpose(Center, CenterTransp),
+	check_victory_horizontal(CenterTransp, PieceLetter)
+	);
+	check_victory_diagonal(Center, PieceLetter);
+	(
+	transpose(Center, CenterTransp),
+	check_victory_diagonal(CenterTransp, PieceLetter)
+	).
+
+check_victory_horizontal([Line|CenterR], PieceLetter):-
+	(
+	(Line = [[A, _, _], [A, _, _], [A, _, _]],
+	PieceLetter = A);
+	(Line = [[_, A, _], [_, A, _], [_, A, _]],
+	PieceLetter = A);
+	(Line = [[_, _, A], [_, _, A], [_, _, A]],
+	PieceLetter = A);
+	(Line = [[A, _, _], [_, A, _], [_, _, A]],
+	PieceLetter = A);
+	(Line = [[_, _, A], [_, A, _], [A, _, _]],
+	PieceLetter = A)
+	), PieceLetter \= 'e';
+	check_victory_horizontal(CenterR, PieceLetter).
+	
+
+check_victory_diagonal(Center, PieceLetter):-
+	(
+	(Center = [[[A, _, _], [_, _, _], [_, _, _]],
+				[[_, _, _], [A, _, _], [_, _, _]],
+				[[_, _, _], [_, _, _], [A, _, _]]],
+	PieceLetter = A);
+	(Center = [[[_, A, _], [_, _, _], [_, _, _]],
+				[[_, _, _], [_, A, _], [_, _, _]],
+				[[_, _, _], [_, _, _], [_, A, _]]],
+	PieceLetter = A);
+	(Center = [[[_, _, A], [_, _, _], [_, _, _]],
+				[[_, _, _], [_, _, A], [_, _, _]],
+				[[_, _, _], [_, _, _], [_, _, A]]],
+	PieceLetter = A);
+	(Center = [[[A, _, _], [_, _, _], [_, _, _]],
+				[[_, _, _], [_, A, _], [_, _, _]],
+				[[_, _, _], [_, _, _], [_, _, A]]],
+	PieceLetter = A);
+	(Center = [[[_, _, A], [_, _, _], [_, _, _]],
+				[[_, _, _], [_, A, _], [_, _, _]],
+				[[_, _, _], [_, _, _], [A, _, _]]],
+	PieceLetter = A)
+	), PieceLetter \= 'e'.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
