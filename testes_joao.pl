@@ -4,19 +4,6 @@
 % 2. otrio por peças iguais em linha - horizontal / vertical / diagonal
 % 3. otrio por colocação das 3 peças concêntricas
 % 4. empate - nenhum jogador pode fazer mais movimentos
-
-
-left([ [r, r, r], [r, r, r], [r, r, r] ]).
-
-right([ [b, b, b], [b, b, b], [b, b, b] ]).
-
-top([ [g, g, g], [g, g, g], [g, g, g] ]).
-
-bottom([ [p, p, p], [p, p, p], [p, p, p] ]).
-
-center([ [ [e, e, e], [e, e, e], [e, e, e] ],
-         [ [e, e, e], [e, e, e], [e, e, e] ],
-         [ [e, e, e], [e, e, e], [e, e, e] ] ]).
 		 
 		 
 getPeca(Centro, Linha, Coluna, Posicao, Peca):-
@@ -95,7 +82,7 @@ center([ [ [e, e, e], [e, e, e], [e, e, e] ],
 			 
 % concentrico 2
 	center_linha_conc2([ [ [e, e, e], [e, e, e], [e, e, r] ],
-						[ [p, e, e], [e, e, e], [e, b, e] ],
+						[ [e, e, e], [e, e, e], [e, e, e] ],
 						[ [e, e, e], [g, g, g], [e, e, e] ] ]).
 
 
@@ -127,16 +114,8 @@ teste_print:-
 	nl,
 	display(T, L, C, R, B), nl.
 
-teste_get:-
-	left(L),
-	center_linha_conc1(C),
-	top(T),
-	right(R),
-	bottom(B),
-	nl,
-	display(T, L, C, R, B), nl, nl,
-	write('------testing----- '),
-	
+teste_get(C):-	
+	center_linha_conc2(C),
 	((check_victory(C, PieceLetter),
 	write('victory -> '),
 	write(PieceLetter),
@@ -148,12 +127,12 @@ teste_get:-
 	nl.
 	
 check_victory(Center, PieceLetter):-
-	check_victory_concentric(Center, PieceLetter);
 	check_victory_horizontal(Center, PieceLetter);
 	(
 	transpose(Center, CenterTransp),
 	check_victory_horizontal(CenterTransp, PieceLetter)
 	);
+	check_victory_concentric(Center, PieceLetter);
 	check_victory_diagonal(Center, PieceLetter);
 	(
 	transpose(Center, CenterTransp),
