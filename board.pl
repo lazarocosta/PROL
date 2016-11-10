@@ -84,13 +84,18 @@ joga(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Mode):-
                             removePeca(Source, Y, Id, SourceEnd),
                             inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd)).
 
+jogaPc(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd):-
+                ((N1 == 0)->N2=0, SourceEnd=Source, TabEnd=Tab, nextPlayer(Peca) ;
+                            format('numero de pecas ~d ~n',[N1]),
+
+                            encontraPeca(Source, 3, Peca, Id, Y),
+                            encontraPecaBoard(Tab, 3,Encontrou, 'e', Xnovo, Ynovo, Id),
+       (Encontrou == 1 ->  N2 is N1-1, removePeca(Source, Y, Id, SourceEnd),inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd);
+                            N2=N1,  SourceEnd=Source, TabEnd=Tab, nextPlayer(Peca) ))  .
+
+
 verifica(Source, X, Y, Peca, Mode):-
-                repeat,
-                (Mode == 'A'->  jogador(Peca, Numero),
-                                format('jogador ~d ~n',[Numero]),
-                                ((Peca=='p';Peca=='g')-> encontraPeca(Source, 3, Peca, X, Y);
-                                encontraPeca(Source, 3, Peca, X, Y));
-                                                
+                repeat,                                               
                                 jogador(Peca, Numero),
                                 format('jogador ~d ~n',[Numero]),
                                 peca(Peca, Peca1),
@@ -101,31 +106,20 @@ verifica(Source, X, Y, Peca, Mode):-
                                 valid(X),
                                 write('insira coordenada Y'),nl,
                                 ((Peca=='p'; Peca=='g') -> read(Y1), valid(Y1),convert(Y1, Y);
-                                                        read(Y), valid(Y))),
-                 checkSource(Source, X, Y).
+                                                        read(Y), valid(Y)),
+                                checkSource(Source, X, Y).
 
 
 verificaBoard(Tab, X, Y, Id, Mode):-
-                repeat,
-                (Mode =='A'->
-                            %random(1,4, X),
-                            %random(1,4, Y),
-                            encontraPecaBoard(Tab, 3, 'e', X, Y, Id)
-                
-                                ;
-
-
+                repeat,  
                             write('As novas coordenadas da peca'),nl,
                             write('insira coordenada X'),nl,
                             read(X),
                             valid(X),
                             write('insira coordenada Y'),nl,
                             read(Y),
-                            valid(Y)),
-
-
-                checkBoard(Tab, Id, X, Y),
-                write('...').
+                            valid(Y),
+                            checkBoard(Tab, Id, X, Y).
 
 convert(1,3).
 convert(3,1).
@@ -152,11 +146,12 @@ valid(2).
 valid(3).
 %valid(_):- write('invalid'),nl,fail.
 
-semPecas(NFinal,N1,N2, N3, N4):-
+semPecas(NFinal):-
             ((NFinal=0)->format('Empate ~n',[]); fail).
 
-encontraPeca([Pecas|Lines], 3, Peca, X, Y):-
 
+%===========000
+encontraPeca([Pecas|Lines], 3, Peca, X, Y):-
                 (Pecas =[Peca,_,_]-> X=1,Y=3; (Pecas =[_,Peca,_]-> X=2,Y=3;  (Pecas =[_,_,Peca]-> X=3,Y=3;  
                                                                                                 encontraPeca(Lines, 2, Peca, X, Y)) )).
 
@@ -168,16 +163,19 @@ encontraPeca([Pecas|_], 1, Peca, X, Y):-
                 (Pecas =[Peca,_,_]-> X=1,Y=1; (Pecas =[_,Peca,_]-> X=2,Y=1;  (Pecas =[_,_,Peca]-> X=3,Y=1, write('aqui');
                                                                                                  write('nao'), fail))).
 %============
-encontraPecaBoard([Line|Tab], 3, Peca, X, Y, Id):-
-                peca(Line, 3, Peca, Id, X),Y = 3;
-                 encontraPecaBoard(Tab, 2, Peca, X, Y, Id).
+encontraPecaBoard([Line|Tab], 3,Encontrou, Peca, X, Y, Id):-
+                write('aqui'),
+                peca(Line, 3, Peca, Id, X),Y = 3, Encontrou=1;
+                 encontraPecaBoard(Tab, 2,Encontrou, Peca, X, Y, Id).
 
-encontraPecaBoard([Line|Tab], 2, Peca, X, Y, Id):-
-                peca(Line, 3, Peca, Id, X),Y = 2;
-                 encontraPecaBoard(Tab, 1, Peca, X, Y, Id).
+encontraPecaBoard([Line|Tab], 2,Encontrou, Peca, X, Y, Id):-
+  write('aqui'),
+                peca(Line, 3, Peca, Id, X),Y = 2,Encontrou=1;
+                 encontraPecaBoard(Tab, 1,Encontrou, Peca, X, Y, Id).
 
-encontraPecaBoard([Line|Tab], 1, Peca, X, Y, Id):-
-                peca(Line, 3, Peca, Id, X),Y = 1;fail.
+encontraPecaBoard([Line|Tab], 1,Encontrou, Peca, X, Y, Id):-
+  write('aqui'),
+                peca(Line, 3,Peca, Id, X),Y = 1,Encontrou=1;Encontrou=0, write(Encontrou).
 %=====
 peca([Pecas|Lines], 3, Peca, X, Y):-
                 (X==1 ->(Pecas =[Peca,_,_]->Y=1 ); peca(Lines, 2, Peca, X, Y));
@@ -185,13 +183,15 @@ peca([Pecas|Lines], 3, Peca, X, Y):-
                 (X==3 ->(Pecas =[_,_,Peca]->Y=1 ); peca(Lines, 2, Peca, X, Y)).
 
 peca([Pecas|Lines], 2, Peca, X, Y):-
-
-                (X==1 -> (Pecas =[Peca,_,_]->Y=2 );peca(Lines, 1, Peca, X, Y));
-                (X==2 -> (Pecas =[_,Peca,_]->Y=2 );peca(Lines, 1, Peca, X, Y));
-                (X==3 -> (Pecas =[_,_,Peca]->Y=2 );peca(Lines, 1, Peca, X, Y)).
+                (X==1 -> (Pecas =[Peca,_,_]->Y=2 );  peca(Lines, 1, Peca, X, Y));
+                (X==2 -> (Pecas =[_,Peca,_]->Y=2 ); peca(Lines, 1,Peca, X, Y));
+                (X==3 -> (Pecas =[_,_,Peca]->Y=2 );  peca(Lines, 1, Peca, X, Y)).
 
 peca([Pecas|_], 1 , Peca, X, Y):-
                 (X==1 -> (Pecas =[Peca,_,_]->Y=3 );fail);
                 (X==2 -> (Pecas =[_,Peca,_]->Y=3 );fail);
                 (X==3 -> (Pecas =[_,_,Peca]->Y=3 );fail).
+
+%=======000
+
                                                                                                 

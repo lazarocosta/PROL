@@ -36,9 +36,10 @@ game('H'):-
         init,
         repeat,
                retract(board('c', N, C)),
+               
                retract(letra(Letra)),
                retract(board(Letra, Numero, Board)),
-               once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend, 'A')),
+               once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend, 'H')),
                proximaLetra(Letra, Proxima),
                assert(board(Letra,Nnovo, Board1)),
                assert(letra(Proxima)),
@@ -57,13 +58,37 @@ game('H'):-
 
                NFinal is N-1,
                write(NFinal),nl,
-               assert(board('c', NFinal, Cend)),               
+               assert(board('c', NFinal, Cend)),          
                semPecas(NFinal).
         
-outro:-
-                board('c', NFinal, Cend),
-              encontraPecaBoard(Cend, 3, 'e', X, Y, 1),
-              write(X),
-              write(Y).
+game('A'):-
+        init,
+        repeat,
+               retract(board('c', N, C)),
+               
+               retract(letra(Letra)),
+               retract(board(Letra, Numero, Board)),
+                    once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend)),
+           
+               proximaLetra(Letra, Proxima),
+               assert(board(Letra,Nnovo, Board1)),
+               assert(letra(Proxima)),
+
+              retract(board('r', N1, L)),
+              retract(board('b', N2, R)),
+              retract(board('g', N3, T)),
+              retract(board('p', N4, B)),
+
+               display(T, L, Cend, R, B),
+
+               assert(board('r', N1, L)),
+               assert(board('b', N2, R)),
+               assert(board('g', N3, T)),
+               assert(board('p', N4, B)),
+
+               NFinal is N-1,
+               write(NFinal),nl,
+               assert(board('c', NFinal, Cend)),          
+               semPecas(NFinal).
 
 
