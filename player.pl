@@ -7,9 +7,9 @@ board('g', 9,[ [g, g, g], [g, g, g], [g, g, g] ]).%top
 
 board('p', 9,[ [p, p, p], [p, p, p], [p, p, p] ]).%bottom
 
-board('c', 9,[ [ [e, e, e], [e, e, e], [e, e, e] ],%center
-               [ [e, e, e], [e, e, e], [e, e, e] ],
-               [ [e, e, e], [e, e, e], [e, e, e] ] ]).
+board('c', 27,[ [ [e, e, e], [e, e, e], [e, e, e] ],%center
+                [ [e, e, e], [e, e, e], [e, e, e] ],
+                [ [e, e, e], [e, e, e], [e, e, e] ] ]).
 
 letra('r').
 

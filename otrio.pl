@@ -1,6 +1,6 @@
 :-use_module(library(lists)).
 :-use_module(library(random)).
-:- dynamic left/1, right/1, top/1, bottom/1, center/1, letra/1, board/3.
+:- dynamic  letra/ 1, board / 3.
 :- include('testes_joao.pl').
 :- include('printBoard.pl').
 :- include('board.pl').
@@ -38,7 +38,7 @@ game('H'):-
                retract(board('c', N, C)),
                retract(letra(Letra)),
                retract(board(Letra, Numero, Board)),
-               once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend, 'H')),
+               once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend, 'A')),
                proximaLetra(Letra, Proxima),
                assert(board(Letra,Nnovo, Board1)),
                assert(letra(Proxima)),
@@ -55,8 +55,15 @@ game('H'):-
                assert(board('g', N3, T)),
                assert(board('p', N4, B)),
 
-               assert(board('c', N, Cend)),
-               semPecas(N1,N2, N3, N4).
-
+               NFinal is N-1,
+               write(NFinal),nl,
+               assert(board('c', NFinal, Cend)),               
+               semPecas(NFinal).
+        
+outro:-
+                board('c', NFinal, Cend),
+              encontraPecaBoard(Cend, 3, 'e', X, Y, 1),
+              write(X),
+              write(Y).
 
 
