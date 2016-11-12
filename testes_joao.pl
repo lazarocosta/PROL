@@ -115,14 +115,12 @@ teste_print:-
 	display(T, L, C, R, B), nl.
 
 teste_get(C):-	
-	center_linha_conc2(C),
 	((check_victory(C, PieceLetter),
 	write('victory -> '),
 	write(PieceLetter),
 	nl);
 	(write('no victory'),
 	nl)),
-	
 	nl,
 	nl.
 	

@@ -1,4 +1,3 @@
-
 printLine([C|R]):-
 	write('||'),
         printPecas(C,2),
@@ -12,7 +11,6 @@ printboardTop(A):-
           printLine(A),
           nl.
 
-
 printPecas([C|R], N):-
                 write(' '),
                 traduz(C),
@@ -21,7 +19,6 @@ printPecas([C|R], N):-
                         write(' ') ),
                 N1 is N-1,
                 printPecas(R, N1).
-
 
 printPecas([],_).
 
@@ -39,7 +36,7 @@ printboard([],[],[], _).
 
 printBottom:-
 	shortSeparation,
-	write('                       A             B            C').
+	write('                       1             2            3').
 
 separation:- write('    --------------------------------------------------------------------'), 
                 nl.

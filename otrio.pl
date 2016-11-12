@@ -36,15 +36,15 @@ game(Player):-
                retract(letra(Letra)),
                retract(board(Letra, Numero, Board)),
                
-               (Player == 'H' -> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend, 'H')), NFinal is N-1;
-                                 
-               (Player == 'A' -> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou)),
-                                   (Encontrou==1 -> NFinal is N-1;
+               (Player = 'H' -> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend)), NFinal is N-1;
+         
+               (Player = 'A' -> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou)),
+                                   (Encontrou=1 -> NFinal is N-1;
                                                     NFinal=N1);
-               (Player == 'M' -> retract(mode(1,Mode)), (Mode=='H'-> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend, 'H')),
+               (Player = 'M' -> retract(mode(1,Mode)), (Mode='H'-> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend)),
                                                                       NFinal is N-1;
-                                                        (Mode=='A'-> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou)),
-                                                                     (Encontrou==1 -> NFinal is N-1;
+                                                        (Mode='A'-> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou)),
+                                                                     (Encontrou=1 -> NFinal is N-1;
                                                                                       NFinal = N1))),
                                 nextMode(Mode, ModeNovo),assert(mode(1,ModeNovo))))),
                 
@@ -52,18 +52,12 @@ game(Player):-
                assert(board(Letra,Nnovo, Board1)),
                assert(letra(Proxima)),
 
-              retract(board('r', N1, L)),
-              retract(board('b', N2, R)),
-              retract(board('g', N3, T)),
-              retract(board('p', N4, B)),
+                 board('r', N1, L),
+                 board('b', _, R),
+                 board('g', _, T),
+                 board('p', _, B),
+                 display(T, L, Cend, R, B),    
 
-               display(T, L, Cend, R, B),
-
-               assert(board('r', N1, L)),
-               assert(board('b', N2, R)),
-               assert(board('g', N3, T)),
-               assert(board('p', N4, B)),
-
-               assert(board('c', NFinal, Cend)),          
+                assert(board('c', NFinal, Cend)),       
                semPecas(NFinal);
                teste_get(Cend).
