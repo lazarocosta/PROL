@@ -109,7 +109,7 @@ verifica(Source, X, Y, Peca):-
 
 verificaBoard(Tab, X, Y, Id):-
                 repeat,  
-                    write('As novas coordenadas da peca'),nl,
+                    write('Novas coordenadas da peca'),nl,
                     write('insira coordenada X'),nl,
                     read(X),
                     valid(X),
@@ -136,7 +136,6 @@ valid(3).
 valid(_):- write('invalid'),nl,nl,nl,nl,nl,fail.
 
 
-
  semPecas(NFinal):-
             ((NFinal=0)->format('Empate ~n',[]); fail).
 
@@ -145,8 +144,7 @@ encontraProxima([Pecas|Lines],Peca, X, 3, XFim, YFim):-
     XProximo is X+1,
      (1 >= XProximo, Pecas = [Peca,_,_]-> XFim=1, YFim=3;   
                                                 (2 >= XProximo, Pecas = [_,Peca,_]-> XFim=2, YFim=3;  
-                                                                            (3 >= XProximo, Pecas = [_,_,Peca]-> XFim=3, YFim=3;                                                                            
-                                                                                    encontraProxima(Lines,Peca, 0, 2, XFim, YFim)))).
+                                                                            (3 >= XProximo, Pecas = [_,_,Peca]-> XFim=3, YFim=3;                                                                                                                                                            encontraProxima(Lines,Peca, 0, 2, XFim, YFim)))).
 encontraProxima([Pecas|Lines],Peca, X, 2, XFim, YFim):-
     XProximo is X+1,  
      (1 >= XProximo, Pecas = [Peca,_,_]-> XFim=1, YFim=2;   
@@ -159,7 +157,7 @@ encontraProxima([Pecas|_],Peca, X, 1, XFim, YFim):-
                         (1 >= XProximo, Pecas = [Peca,_,_]-> XFim=1, YFim=1; 
                                             (2 >= XProximo,  Pecas = [_,Peca,_]-> XFim=2, YFim=1;  
                                                                         (3 >= XProximo, Pecas = [_,_,Peca]-> XFim=3, YFim=1;  
-                                                                                                 fail)))).
+                                                                                                fail)))).
 %============
 encontraPecaBoard([Line|Tab], 3, Encontrou, Peca, X, Y, Id):-
                  peca(Line, 3, Peca, Id, X),Y = 3, Encontrou=1;
