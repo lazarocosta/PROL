@@ -107,14 +107,15 @@ coluna('C', 3).
 
 teste_print:-
 	left(L),
-	center(C),
+	center_linha_conc1(C),
 	top(T),
 	right(R),
 	bottom(B),
 	nl,
-	display(T, L, C, R, B), nl.
+	display(T, L, C, R, B), nl,
+	teste_checkVictory(C).
 
-teste_get(C):-	
+teste_checkVictory(C):-	
 	((check_victory(C, PieceLetter),
 	write('victory -> '),
 	write(PieceLetter),
@@ -181,10 +182,14 @@ check_victory_diagonal(Center, PieceLetter):-
 	
 check_victory_concentric([Line|CenterR], PieceLetter):-
 	check_victory_concentric_aux(Line, PieceLetter);
-	check_victory_concentric_aux(CenterR, PieceLetter).
+	check_victory_concentric(CenterR, PieceLetter).
 	
 check_victory_concentric_aux([Position|Rest], PieceLetter):-
-	(Position = [A, A, A],
+	( % nth1(1, Position, Pos1),
+	% nth1(2, Position, Pos2),
+	% nth1(3, Position, Pos3),
+	% write('position = '), write(Pos1), write(', '), write(Pos2), write(', '), write(Pos3), nl,
+	Position = [A, A, A],
 	PieceLetter = A,
 	PieceLetter \= 'e');
 	check_victory_concentric_aux(Rest, PieceLetter).

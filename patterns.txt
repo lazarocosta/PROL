@@ -1,6 +1,3 @@
-isto ou loops com getPeca?
-
-
 se qualquer linha faz match com
 
 [[A, _, _], [A, _, _], [A, _, _]]
