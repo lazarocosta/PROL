@@ -97,6 +97,11 @@ verificaRandom(Source,X, Y):-
                         checkSource(Source, X, Y).
 
 						
+valid(1).
+valid(2).
+valid(3).
+valid(_):- write('invalid'),nl,nl,nl,nl,nl,fail.
+						
 % versao antiga sem get_char
 verifica(Source, X, Y, Peca):-
                 repeat,
