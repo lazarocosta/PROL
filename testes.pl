@@ -4,13 +4,11 @@
 % 2. otrio por peças iguais em linha - horizontal / vertical / diagonal
 % 3. otrio por colocação das 3 peças concêntricas
 % 4. empate - nenhum jogador pode fazer mais movimentos
-		 
-		 
+		 		 
 getPeca(Centro, Linha, Coluna, Posicao, Peca):-
                 nth1(Linha, Centro, Listlinha),
                 nth1(Coluna, Listlinha, ListPeca),
                 nth1(Posicao, ListPeca, Peca).
-
 
 %%%% tabuleiro inicial base
 
@@ -114,15 +112,6 @@ teste_print:-
 	nl,
 	display(T, L, C, R, B), nl.
 
-teste_get(C):-	
-	((check_victory(C, PieceLetter),
-	write('victory -> '),
-	write(PieceLetter),
-	nl);
-	(write('no victory'),
-	nl)),
-	nl,
-	nl.
 	
 check_victory(Center, PieceLetter):-
 	check_victory_horizontal(Center, PieceLetter);
@@ -130,12 +119,10 @@ check_victory(Center, PieceLetter):-
 	transpose(Center, CenterTransp),
 	check_victory_horizontal(CenterTransp, PieceLetter)
 	);
-	check_victory_concentric(Center, PieceLetter);
-	check_victory_diagonal(Center, PieceLetter);
-	(
-	transpose(Center, CenterTransp),
-	check_victory_diagonal(CenterTransp, PieceLetter)
-	).
+	check_victory_concentric(Center,  PieceLetter);
+	check_victory_diagonal(Center, PieceLetter).
+
+	check_victory_horizontal([], PieceLetter):- fail.
 
 check_victory_horizontal([Line|CenterR], PieceLetter):-
 	(
@@ -174,25 +161,42 @@ check_victory_diagonal(Center, PieceLetter):-
 	(Center = [[[_, _, A], [_, _, _], [_, _, _]],
 				[[_, _, _], [_, A, _], [_, _, _]],
 				[[_, _, _], [_, _, _], [A, _, _]]],
+	PieceLetter = A);
+
+		(Center = [[[_, _, _], [_, _, _], [A, _, _]],
+				[[_, _, _], [A, _, _], [_, _, _]],
+				[[A, _, _], [_, _, _], [_, _, _]]],
+	PieceLetter = A);
+
+	(Center = [[[_,_, _], [_, _, _], [_, A, _]],
+				[[_, _, _], [_, A, _], [_, _, _]],
+				[[_, A, _], [_, _, _], [_, _, _]]],
+	PieceLetter = A);
+	(Center = [[[_, _,_], [_, _, _], [_, _, A]],
+				[[_, _, _], [_, _, A], [_, _, _]],
+				[[_, _, A], [_, _, _], [_, _, _]]],
+	PieceLetter = A);
+	(Center = [[[_, _, _], [_, _, _], [_, _, A]],
+				[[_, _, _], [_, A, _], [_, _, _]],
+				[[A, _, _], [_, _, _], [_, _, _]]],
+	PieceLetter = A);
+	(Center = [[[_, _, _], [_, _, _], [A, _, _]],
+				[[_, _, _], [_, A, _], [_, _, _]],
+				[[_, _, A], [_, _, _], [_, _, _]]],
 	PieceLetter = A)
 	), PieceLetter \= 'e'.
 	
 
-	
+check_victory_concentric([], PieceLetter):-fail.	
 check_victory_concentric([Line|CenterR], PieceLetter):-
-	check_victory_concentric_aux(Line, PieceLetter);
-	check_victory_concentric_aux(CenterR, PieceLetter).
-	
+		check_victory_concentric_aux(Line, PieceLetter);
+		check_victory_concentric(CenterR, PieceLetter).
+
+check_victory_concentric_aux([], PieceLetter):- fail.
 check_victory_concentric_aux([Position|Rest], PieceLetter):-
-	(Position = [A, A, A],
-	PieceLetter = A,
-	PieceLetter \= 'e');
-	check_victory_concentric_aux(Rest, PieceLetter).
-	
-	
-	
-	
-	
-	
-	
-	
+		(Position = [A, A, A],
+		PieceLetter = A,
+		PieceLetter \= 'e');
+	   check_victory_concentric_aux(Rest, PieceLetter).
+
+

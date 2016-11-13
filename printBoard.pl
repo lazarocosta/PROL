@@ -49,6 +49,11 @@ traduz('r'):- write('R').
 traduz('b'):- write('B').
 traduz('e'):- write(' ').
 
+convertLeter(p, 'P').
+convertLeter(g, 'G').
+convertLeter(r, 'R').
+convertLeter(b, 'B').
+
 display(Top, Left, Center, Right, Bottom):-
                 shortSeparation,
                 printboardTop(Top),
@@ -56,5 +61,4 @@ display(Top, Left, Center, Right, Bottom):-
                 printboard(Left, Center, Right, 3),
                 separation,
                 printboardTop(Bottom),
-                printBottom, nl, nl,nl.
-                
+                printBottom, nl, nl,nl.               

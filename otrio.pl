@@ -1,7 +1,7 @@
 :-use_module(library(lists)).
 :-use_module(library(random)).
 :- dynamic  letra/ 1, board / 3, mode / 2.
-:- include('testes_joao.pl').
+:- include('testes.pl').
 :- include('printBoard.pl').
 :- include('board.pl').
 :- include('player.pl').
@@ -78,21 +78,34 @@ game(Player):-
                  display(T, L, Cend, R, B),    
 
                assert(board('c', NFinal, Cend)),       
-               semPecas(NFinal);
-               teste_get(Cend).
+               ( gameTied(NFinal);
+                  teste_get(Cend)).
+   
 
-win(Numero, Leter) :-
-            write('              ____________________________                  '),nl,
-            write('             |                            |                '),nl,
-            write('             |                            |                '),nl,
-           format('             |  Player  ~d  Leter  ~s  win  |                ~n',[Numero, Leter]),
-            write('             |                            |                '),nl,
-            write('             |____________________________|                '),nl.
+teste_get(C):-
+	((check_victory(C, PieceLetter),
+	win(PieceLetter),
+	nl);
+    fail).
 
-gameTied :-
+win(Leter) :-
+            jogador(Leter,Number),
+            convertLeter(Leter, Uppercase),
+            write('              ______________________________                  '),nl,
+            write('             |                              |                '),nl,
+            write('             |                              |                '),nl,
+           format('             |  Player  ~d  Leter  ~s  Winer  |                ~n',[Number, Uppercase]),
+            write('             |                              |                '),nl,
+            write('             |______________________________|                '),nl.
+
+gameTied(NFinal):-
+            ((NFinal=0)->
             write('              ____________________________           '),nl,
             write('             |                            |          '),nl,
             write('             |                            |          '),nl,
            format('             |         Game tied          |          ~n',[]),
             write('             |                            |          '),nl,
-            write('             |____________________________|          '),nl.
+            write('             |____________________________|          '),nl; fail).
+
+outro:-board('c', 27,C),
+        encontraPecaBoard(C, 1, Encontrou, 'r', X, Y, 1).
