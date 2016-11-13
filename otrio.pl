@@ -93,7 +93,7 @@ win(Leter) :-
             write('              ______________________________                  '),nl,
             write('             |                              |                '),nl,
             write('             |                              |                '),nl,
-           format('             |  Player  ~d  Leter  ~s  Winer  |                ~n',[Number, Uppercase]),
+           format('             | Player  ~d  Letter  ~s  Winner |                ~n',[Number, Uppercase]),
             write('             |                              |                '),nl,
             write('             |______________________________|                '),nl.
 
