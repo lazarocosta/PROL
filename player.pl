@@ -27,6 +27,6 @@ jogador('g',2).
 jogador('b',1).
 jogador('p',2).
 
-convertToLeter(1,'H').
-convertToLeter(2,'M').
-convertToLeter(3,'A').
+convertToLeter('1','H').
+convertToLeter('2','M').
+convertToLeter('3','A').
