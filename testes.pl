@@ -83,22 +83,6 @@ center([ [ [e, e, e], [e, e, e], [e, e, e] ],
 						[ [e, e, e], [e, e, e], [e, e, e] ],
 						[ [e, e, e], [g, g, g], [e, e, e] ] ]).
 
-
-%%%%% tabuleiros de empate
-
-% TO-DO
-
-% center_iguais_horiz1
-% center_iguais_horiz2
-% center_iguais_vert1
-% center_iguais_vert2
-% center_linha_cresc_hor1
-% center_linha_cresc_hor2
-% center_linha_cresc_diag1
-% center_linha_cresc_diag2
-% center_linha_conc1
-% center_linha_conc2
-
 coluna('A', 1).
 coluna('B', 2).
 coluna('C', 3).

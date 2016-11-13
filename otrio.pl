@@ -28,9 +28,9 @@ otrio :-
 menu:-
         repeat,
             format('Modo de jogo~n',[]),
-            format('Player to Player    opcao:1 ~n',[]),
-            format('Player to Boot      opcao:2 ~n',[]),
-            format('Boot to Boot        opcao:3 ~n',[]),
+            format('Player vs Player    opcao:1 ~n',[]),
+            format('Player vs Bot      opcao:2 ~n',[]),
+            format('Bot vs Bot        opcao:3 ~n',[]),
             get_char(Mode),
             get_char(_),
             convertToLeter(Mode, Mode1),
