@@ -79,7 +79,14 @@ joga(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd):-
                             removePeca(Source, Y, Id, SourceEnd),
                             inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd)).
 
-jogaPc(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou):-
+jogaPc(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou, Mode):-
+
+(Mode = 1 ->jogaPcInteligente(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou);
+
+(Mode = 0 -> jogaPcRandom(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou);write(''))).
+
+
+jogaPcRandom(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou):-
                 jogador(Peca, Numero),
                 format('Player ~d ~n',[Numero]),
                 peca(Peca, Peca1),
@@ -90,6 +97,34 @@ jogaPc(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou):-
                             encontraPecaBoard(Tab, 3,Encontrou, e, Xnovo, Ynovo, Id),
                             (Encontrou = 1 ->  N2 is N1-1, removePeca(Source, Y, Id, SourceEnd),inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd));
                              (Encontrou = 0 ->N2=N1, SourceEnd=Source, TabEnd=Tab, nextPlayer(Peca))).
+
+sourceCopy('copy').
+boardCopy('copy').
+nCopy('copy').
+
+jogaPcInteligente(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou):-
+
+    (N1 = 0 -> Encontrou=0, fail;
+
+    retract(sourceCopy(Z)),
+    assert(sourceCopy(Source)),
+
+        retract(nCopy(Q)),
+        assert(nCopy(N1))),
+
+repeat,
+    retract(sourceCopy(SourceCopy)),
+
+    encontraProxima(SourceCopy,Peca, 0,3, Id, Y),
+    encontraPecaBoard(Tab, 3,Encontrou1, e, Xnovo, Ynovo, Id),
+    removePeca(SourceCopy, Y, Id, SourceEnd1),
+    assert(sourceCopy(SourceEnd1)),
+     (Encontrou1 = 1 -> inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd1),
+     	((check_victory(TabEnd1, PieceLetter),removePeca(Source, Y, Id, SourceEnd),
+        inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd), N2 is N1-1); 
+        retract(nCopy(Ncopy)), Ncopy1 is Ncopy-1,assert(nCopy(Ncopy1)), Encontrou=1, 
+                  (Ncopy1 = 0 -> Encontrou=0; fail))).
+
 
 verificaRandom(Source,X, Y):-
                         random(1,4, X),

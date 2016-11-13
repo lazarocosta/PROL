@@ -1,6 +1,6 @@
 :-use_module(library(lists)).
 :-use_module(library(random)).
-:- dynamic  letra/ 1, board / 3, mode / 2.
+:- dynamic  letra/ 1, board / 3, mode / 2, sourceCopy/1, boardCopy/1, nCopy/1.
 :- include('testes.pl').
 :- include('printBoard.pl').
 :- include('board.pl').
@@ -57,7 +57,7 @@ game(Player):-
                
                (Player = 'H' -> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend)), NFinal is N-1;
          
-               (Player = 'A' -> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou)),
+               (Player = 'A' -> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou, 0)),
                                    (Encontrou=1 -> NFinal is N-1;
                                                     NFinal = N1);
                (Player = 'M' -> retract(mode(1,Mode)), (Mode ='H'-> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend)),
@@ -106,5 +106,8 @@ gameTied(NFinal):-
             write('             |                            |          '),nl,
             write('             |____________________________|          '),nl; fail).
 
-outro:-board('c', 27,C),
-        encontraPecaBoard(C, 1, Encontrou, 'r', X, Y, 1).
+outro:-
+        board('c', 27,C),
+        board('r', N1, R),
+        jogaPcInteligente('r', N1, N2, R, SourceEnd, C, TabEnd, Encontrou),
+        write(TabEnd),nl.
