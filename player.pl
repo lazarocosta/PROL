@@ -27,6 +27,12 @@ jogador('g',2).
 jogador('b',1).
 jogador('p',2).
 
+peca(r, 'R').
+peca(g, 'G').
+peca(b, 'B').
+peca(p, 'P').
+
+
 convertToLeter('1','H').
 convertToLeter('2','M').
 convertToLeter('3','A').

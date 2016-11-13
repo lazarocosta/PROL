@@ -81,7 +81,6 @@ game(Player):-
                ( gameTied(NFinal);
                   teste_get(Cend)).
    
-
 teste_get(C):-
 	((check_victory(C, PieceLetter),
 	win(PieceLetter),
