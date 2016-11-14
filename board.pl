@@ -138,43 +138,28 @@ valid(3).
 valid(_):- write('invalid'),nl,nl,nl,nl,nl,fail.
 						
 % versao antiga sem get_char
+
+						
 verifica(Source, X, Y, Peca):-
                 repeat,
-						nl,
-						nl,
-						jogador(Peca, Numero),
-						format('jogador ~d ~n',[Numero]),
-						peca(Peca, Peca1),
-						format('Peca ~s ~n',[Peca1]),
-						nl,
-                        write('coordenadas da peca a remover!'),nl,
-                        write('insira coordenada X'),nl,
-                        read(X),
-                        valid(X),
-                        write('insira coordenada Y'),nl,
-                        ((Peca=='p'; Peca=='g') -> read(Y1), valid(Y1),convert(Y1, Y);
-                                                        read(Y), valid(Y)),
-                        checkSource(Source, X, Y).
-						
-%verifica(Source, X, Y, Peca):-
-%                repeat,
-%                       nl,
-%                       nl,                                            
-%                       jogador(Peca, Numero),
-%                       format('Player ~d ~n',[Numero]),
-%                       peca(Peca, Peca1),
-%                       format('Piece ~s ~n',[Peca1]),
-%                       nl,
-%                        write('Coordinates of the piece to be removed'),nl,
-%                        write('insert coordinate X'),nl,
-%                        get_char(X1),
-%                        get_char(_),
-%                        number(X1, X),
-%                        write('insert coordinate Y'),nl,
-%                        ((Peca=='p'; Peca=='g') ->  get_char(Y1),get_char(_),convert(Y1, Y);
-%                                                    get_char(Y1),get_char(_),number(Y1, Y)),
-%                         checkSource(Source, X, Y).
+                       nl,
+                       nl,                                            
+                       jogador(Peca, Numero),
+                       format('Player ~d ~n',[Numero]),
+                       peca(Peca, Peca1),
+                       format('Piece ~s ~n',[Peca1]),
+                       nl,
+                        write('Coordinates of the piece to be removed'),nl,
+                        write('insert coordinate X'),nl,
+                        get_char(X1),
+                        get_char(_),
+                        number(X1, X),
+                        write('insert coordinate Y'),nl,
+                        ((Peca=='p'; Peca=='g') ->  get_char(Y1),get_char(_),convert(Y1, Y);
+                                                   get_char(Y1),get_char(_),number(Y1, Y)),
+                         checkSource(Source, X, Y).
 
+                      
 verificaBoard(Tab, X, Y, Id):-
                 repeat,  
                     nl,
@@ -188,6 +173,7 @@ verificaBoard(Tab, X, Y, Id):-
                     get_char(Y1),
                     get_char(_),
                     number(Y1, Y),
+                    write('aqui'),
                     checkBoard(Tab,Id, X, Y).
 number('1', 1).
 number('2', 2).
