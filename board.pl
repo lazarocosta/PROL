@@ -173,7 +173,6 @@ verificaBoard(Tab, X, Y, Id):-
                     get_char(Y1),
                     get_char(_),
                     number(Y1, Y),
-                    write('aqui'),
                     checkBoard(Tab,Id, X, Y).
 number('1', 1).
 number('2', 2).

@@ -62,7 +62,7 @@ game(Player):-
                                                     NFinal = N1);
                (Player = 'M' -> retract(mode(1,Mode)), (Mode ='H'-> once(joga(Letra, Numero, Nnovo, Board, Board1, C, Cend)),
                                                                       NFinal is N-1;
-                                                        (Mode = 'A'-> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou)),
+                                                        (Mode = 'A'-> once(jogaPc(Letra, Numero, Nnovo, Board, Board1, C, Cend, Encontrou, 0)),
                                                                      (Encontrou = 1 -> NFinal is N-1;
                                                                                       NFinal = N1))),
                                 nextMode(Mode, ModeNovo), assert(mode(1, ModeNovo))))),
