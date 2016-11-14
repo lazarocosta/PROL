@@ -107,7 +107,5 @@ gameTied(NFinal):-
             write('             |____________________________|          '),nl; fail).
 
 outro:-
-        board('c', 27,C),
-        board('r', N1, R),
-        jogaPcInteligente('r', N1, N2, R, SourceEnd, C, TabEnd, Encontrou),
-        write(TabEnd),nl.
+       board('r', 9,R),
+        peca(R, 1, 'e', 1, Y).

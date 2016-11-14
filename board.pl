@@ -92,7 +92,7 @@ jogaPcRandom(Peca, N1, N2, Source, SourceEnd, Tab, TabEnd, Encontrou):-
                 peca(Peca, Peca1),
                 format('Piece ~s ~n',[Peca1]),
                 ((N1 == 0)->N2=0, SourceEnd=Source, TabEnd=Tab, nextPlayer(Peca);
-                            (N1 = 9 -> verificaRandom(Source, X, Y); encontraProxima(Source,Peca, 0,3, Id, Y)),
+                            (N1 = 9 -> verificaRandom(Source, Id, Y); encontraProxima(Source,Peca, 0,3, Id, Y)),
             
                             encontraPecaBoard(Tab, 3,Encontrou, e, Xnovo, Ynovo, Id),
                             (Encontrou = 1 ->  N2 is N1-1, removePeca(Source, Y, Id, SourceEnd),inserePeca(Tab, Xnovo, Ynovo, Id, Peca,TabEnd));
@@ -130,14 +130,6 @@ verificaRandom(Source,X, Y):-
                         random(1,4, X),
                         random(1,4, Y),
                         checkSource(Source, X, Y).
-
-						
-valid(1).
-valid(2).
-valid(3).
-valid(_):- write('invalid'),nl,nl,nl,nl,nl,fail.
-						
-% versao antiga sem get_char
 
 						
 verifica(Source, X, Y, Peca):-
@@ -182,7 +174,7 @@ convert('1', 3).
 convert('3', 1).
 convert('2', 2).
 
-nextPlayer(Peca):-
+nextPlayer(_):-
                 format('No available pieces...next player ~n',[]).              
 %=====================0
 encontraProxima([],_, _, _, _, _):-fail.

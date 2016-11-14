@@ -106,7 +106,7 @@ check_victory(Center, PieceLetter):-
 	check_victory_concentric(Center,  PieceLetter);
 	check_victory_diagonal(Center, PieceLetter).
 
-	check_victory_horizontal([], PieceLetter):- fail.
+	check_victory_horizontal([], _):- fail.
 
 check_victory_horizontal([Line|CenterR], PieceLetter):-
 	(
@@ -171,12 +171,12 @@ check_victory_diagonal(Center, PieceLetter):-
 	), PieceLetter \= 'e'.
 	
 
-check_victory_concentric([], PieceLetter):-fail.	
+check_victory_concentric([],_):-fail.	
 check_victory_concentric([Line|CenterR], PieceLetter):-
 		check_victory_concentric_aux(Line, PieceLetter);
 		check_victory_concentric(CenterR, PieceLetter).
 
-check_victory_concentric_aux([], PieceLetter):- fail.
+check_victory_concentric_aux([], _):- fail.
 check_victory_concentric_aux([Position|Rest], PieceLetter):-
 		(Position = [A, A, A],
 		PieceLetter = A,
