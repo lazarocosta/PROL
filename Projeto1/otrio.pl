@@ -105,7 +105,3 @@ gameTied(NFinal):-
            format('             |         Game tied          |          ~n',[]),
             write('             |                            |          '),nl,
             write('             |____________________________|          '),nl; fail).
-
-outro:-
-       board('r', 9,R),
-        peca(R, 1, 'e', 1, Y).
