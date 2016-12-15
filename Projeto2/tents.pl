@@ -1,5 +1,6 @@
 :-use_module(library(clpfd)).
 :-use_module(library(lists)).
+:-use_module(library(aggregate)).
 :-set_prolog_flag(toplevel_print_options, [quoted(true),portrayed(true),max_depth(0)]).
 :- dynamic  cell/3, vazio/2. 
 
@@ -20,7 +21,7 @@ line(1, 2).
 line(6, 2).
 
 vazio(-1, -1).
-tenda(Line,Col).
+
 
 
 tents(TabEnd, N):-
@@ -82,4 +83,8 @@ sumVars([],_,VLine,ListLine):-
 sumVars([E|List],Vars, VLine,ListLine):-
     nth1(E,Vars, Value),
     sumVars(List,Vars, VLine,[Value|ListLine]).
+
+npalmeiras:-
+    aggregate_all(count, palmeira(L,C), A),
+    write(A).
 
