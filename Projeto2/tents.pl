@@ -24,13 +24,16 @@ vazio(-1, -1).
 
 
 
-tents(TabEnd, N):-
+tents(VarsEnd, N):-
     Lenght is N+1,
     init([], 1, 1, Lenght, 1, VarsEnd),
     domain(VarsEnd, 0,1),
     restrit(1,Lenght,VarsEnd),
+    nTends(VarsEnd),
+    tends2x2(2, Lenght, VarsEnd),nl,
+    palmeiraAdj(VarsEnd),
     labeling([],VarsEnd ),
-    format('~n ~w ~n', [VarsEnd]).
+    showBoard(Lenght, VarsEnd).
 
 
 
@@ -60,7 +63,7 @@ init(Vars, L, C, N, Index, VarsEnd):-
         (assert(cell(Index, L,C)), 
         NewIndex is Index + 1,
         NewC is C + 1, 
-        init([Value|Vars], L, NewC, N, NewIndex, VarsEnd))));
+        init([_|Vars], L, NewC, N, NewIndex, VarsEnd))));
         
         (NewC is C + 1,
         init(Vars, L, NewC, N, Index, VarsEnd)).
@@ -68,7 +71,7 @@ init(Vars, L, C, N, Index, VarsEnd):-
 restrit(N, N, _).
 restrit(I, N, Vars):-
     ((line(I, VLine), findall(Index, cell(Index, I,_),ListLine), sumVars(ListLine,Vars,VLine,[]),
-      col(I, VCol), findall(Index, cell(Index, _,I), ListCol),format('~w ~n', [ListCol]),  sumVars(ListCol, Vars,VCol,[]));
+      col(I, VCol), findall(Index, cell(Index, _,I), ListCol), sumVars(ListCol, Vars,VCol,[]));
 
      (col(I, VCol), findall(Index, cell(Index, _,I), ListCol),  sumVars(ListCol, Vars,VCol,[]));
      (line(I, VLine), findall(Index, cell(Index, I,_),ListLine), sumVars(ListLine,Vars,VLine,[]));
@@ -84,7 +87,82 @@ sumVars([E|List],Vars, VLine,ListLine):-
     nth1(E,Vars, Value),
     sumVars(List,Vars, VLine,[Value|ListLine]).
 
-npalmeiras:-
-    aggregate_all(count, palmeira(L,C), A),
-    write(A).
+nTends(Vars):-
+    findall(A,palmeira(A,_),List),
+    length(List, L),
+    sum(Vars, #=, L).
+
+
+
+%___________________________________________________________________
+tends2x2(Lenght, Lenght, _).
+tends2x2(Li, Lenght, Vars):-
+    tends2x2Aux(Li, 2, Lenght, Vars),
+    NewLine is Li +1,
+    tends2x2(NewLine, Lenght, Vars).
+
+
+tends2x2Aux(_, Lenght, Lenght, _).
+tends2x2Aux(L,C, Lenght, Vars):-
+    Nort is L- 1,
+    West is C - 1,
+    (
+      ((cell(Index1, L,C),    nth1(Index1,Vars, Value1)); Value1=0),
+      ((cell(Index2, Nort,C), nth1(Index2,Vars, Value2)); Value2=0),
+      ((cell(Index3, L,West), nth1(Index3,Vars, Value3)); Value3=0),
+      ((cell(Index4, Nort,West), nth1(Index4,Vars, Value4)); Value4=0)
+     ),
+     sum([Value1, Value2, Value3, Value4],#=<,1),
+     Next is C+1,
+     tends2x2Aux(L,Next, Lenght, Vars).
+
+
+
+palmeiraAdj(Vars):-
+    findall([L-C], palmeira(L,C), Palmeiras),
+    format('~w ~n',[Palmeiras]),
+    palmeiraAdjAux(Palmeiras,Vars).
+
+palmeiraAdjAux([],_).
+palmeiraAdjAux([[L-C]|Palmeiras],Vars):-
+
+
+    Nort is L-1,
+    South is L+1,
+    West is C-1,
+    Easth is C+1,
+
+        (
+      ((cell(Index1, Nort,C),   nth1(Index1,Vars, Value1)); Value1=0),
+      ((cell(Index2, South,C), nth1(Index2,Vars, Value2)); Value2=0),
+      ((cell(Index3, L,Easth), nth1(Index3,Vars, Value3)); Value3=0),
+      ((cell(Index4, L,West), nth1(Index4,Vars, Value4)); Value4=0)
+     ),
+
+
+    sum([Value1, Value2, Value3, Value4],#>=,1),
+    palmeiraAdjAux(Palmeiras,Vars).
+
+/***************************************************************/
+showBoard(L, Vars):-
+	showBoardLine(1, L, Vars).
+
+showBoardLine(L, L, _).
+showBoardLine(Li, L,Vars):-
+	showBoardCol(Li, 1, L, Vars),nl,
+	LiNew is Li+1,
+	showBoardLine(LiNew, L,Vars).
+
+showBoardCol(_, C, C, _).
+
+showBoardCol(L, Ci, C, Vars):-
+	showChar(L, Ci, Vars),
+	CiNew is Ci + 1,
+	showBoardCol(L,CiNew, C, Vars).
+	
+showChar(Li, Ci, Vars):-	
+	((palmeira(Li, Ci), write('P'), write(' | '));
+	(cell(Index, Li,Ci), nth1(Index, Vars, Value), (Value==1, write('T'); write('-')), write(' | '));
+	(vazio(Li,Ci), write('-'), write(' | '))).
+
 
