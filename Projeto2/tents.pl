@@ -59,11 +59,8 @@ line(4, 1).
 line(5, 1).
 line(6, 1).
 line(7, 2).
-<<<<<<< HEAD
-*/
-=======
 
->>>>>>> 3ed72c783eb3b8c729c3d9760803650d9057a917
+*/
 %_________________________________________________________________
 
 % tents: predicado principal
@@ -72,17 +69,14 @@ line(7, 2).
 tents(N):-
     Lenght is N+1, % length fica N + 1 para facilitar utilização de nth
     init([], 1, 1, Lenght, 1, VarsEnd),
-<<<<<<< HEAD
     domain(VarsEnd, 0,1),!,
     restrit(1,Lenght,VarsEnd),!,
     nTends(VarsEnd),!,
     tends2x2(2, Lenght, VarsEnd),!,
-=======
     domain(VarsEnd, 0,1),
     restrit(1,Lenght,VarsEnd),
     nTents(VarsEnd),
     tents2x2(2, Lenght, VarsEnd),nl,
->>>>>>> 3ed72c783eb3b8c729c3d9760803650d9057a917
     palmeiraAdj(VarsEnd),
     labeling([],VarsEnd ),
     showBoard(Lenght, VarsEnd),
@@ -114,7 +108,8 @@ init(Vars,L , N, N, I, VarsEnd):-
 
 % init(Vars, Linha, Coluna, DimensãoMatriz, Index, VarsEnd)
 % LAZ explica sff o que fazemos ao certo com o Vars e o VarsEnd
-
+%vars---variaveis nao inicializadas,
+%varEnd--resultado das variaveis nao inicializadas, é onde vamos aplicar as restriçoes nesta variaveis
 init(Vars, L, C, N, Index, VarsEnd):-
 	% se não é palmeira e se não tem tenda
     (\+ (palmeira(L,C)), notTent(L, C, V),
@@ -181,6 +176,8 @@ tents2x2Aux(L,C, Lenght, Vars):-
 	  % verifica as 4 coordenadas adjacentes (vertical e horizontal)
 	  % LAZ nós com isto vemos norte, sul, este, oeste, e nordeste, noroeste, etc?
 	  % LAZ não devíamos ter 8 'cell' ?
+      %eu verifico que em cada quadrado de dois por dois apenas pode ter uma tenda, deste modo vamos fazer isso recursivamente
+      %para cada linha e coluna
       ((cell(Index1, L,C),    nth1(Index1,Vars, Value1)); Value1=0),
       ((cell(Index2, Nort,C), nth1(Index2,Vars, Value2)); Value2=0),
       ((cell(Index3, L,West), nth1(Index3,Vars, Value3)); Value3=0),
@@ -194,7 +191,9 @@ tents2x2Aux(L,C, Lenght, Vars):-
 % palmeiraAdj:
 % à volta duma palmeira, tem de haver no mínimo uma tenda
 % procuramos as palmeiras todas e inserimos numa lista
-% LAZ explica o resto sff, não apontei muito bem (do palmeiraAdjAux)
+% LAZ explica o resto sff, não apontei muito bem (do palmeiraAdjAux
+%recebe como parametro as palmeiras do board e as variaveis
+%verifica que tem que ter no minimo uma tenda ao lado dessa palmeira em especifico
 
 palmeiraAdj(Vars):-
     findall([L-C], palmeira(L,C), Palmeiras),
@@ -218,8 +217,10 @@ palmeiraAdjAux([[L-C]|Palmeiras],Vars):-
     sum([Value1, Value2, Value3, Value4],#>=,1),
     palmeiraAdjAux(Palmeiras,Vars).
 
-% LAZ aqui é só para confirmar se o número de tendas bate certo com o valor declarado ao fim da linha?
+% LAZ aqui é só para confirmar se o número de tendas bate certo com o valor declarado ao fim da linha?----
+%isto é para depois vermos o numero de casa sem tendas numa determinada linha, uso isto para aqueles numero que aparecem em baixo da solução do board
 % LAZ se sim, onde fazemos para a coluna?
+%quem faz isso é a função  restrit
 
 tentsLine(Vars, [], ListEnd, ListEnd).
 tentsLine(Vars,[[E-Col]|Indexs],List, ListEnd):-
