@@ -69,10 +69,6 @@ line(7, 2).
 tents(N):-
     Lenght is N+1, % length fica N + 1 para facilitar utilização de nth
     init([], 1, 1, Lenght, 1, VarsEnd),
-    domain(VarsEnd, 0,1),!,
-    restrit(1,Lenght,VarsEnd),!,
-    nTends(VarsEnd),!,
-    tends2x2(2, Lenght, VarsEnd),!,
     domain(VarsEnd, 0,1),
     restrit(1,Lenght,VarsEnd),
     nTents(VarsEnd),
