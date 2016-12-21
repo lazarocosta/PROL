@@ -3,6 +3,17 @@
 :-set_prolog_flag(toplevel_print_options, [quoted(true),portrayed(true),max_depth(0)]).
 :- dynamic  cell/3, vazio/2. 
 
+
+
+palmeira(3, 1).
+palmeira(3, 4).
+palmeira(3, 6).
+
+
+
+line(3, 3).
+col(-1,-1).
+
 %__________________Variaveis1_________________________________
 /*
 palmeira(1, 2).
@@ -17,10 +28,11 @@ palmeira(6, 4).
 col(1, 3).
 col(6, 1).
 
-line(1, 2).
+line(1, 3).
 line(6, 2).
 */
 %__________________Variaveis2_________________________________
+/*
 palmeira(1, 3).
 palmeira(1, 6).
 palmeira(2, 1).
@@ -46,14 +58,15 @@ line(4, 1).
 line(5, 1).
 line(6, 1).
 line(7, 2).
+*/
 %_________________________________________________________________
 tents(N):-
     Lenght is N+1,
     init([], 1, 1, Lenght, 1, VarsEnd),
-    domain(VarsEnd, 0,1),
-    restrit(1,Lenght,VarsEnd),
-    nTends(VarsEnd),
-    tends2x2(2, Lenght, VarsEnd),nl,
+    domain(VarsEnd, 0,1),!,
+    restrit(1,Lenght,VarsEnd),!,
+    nTends(VarsEnd),!,
+    tends2x2(2, Lenght, VarsEnd),!,
     palmeiraAdj(VarsEnd),
     labeling([],VarsEnd ),
     showBoard(Lenght, VarsEnd),
