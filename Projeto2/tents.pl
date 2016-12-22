@@ -5,14 +5,17 @@
 
 
 
-palmeira(3, 1).
-palmeira(3, 4).
+palmeira(1, 4).
 palmeira(3, 6).
+palmeira(4, 4).
+palmeira(4, 5).
+palmeira(6, 4).
 
 
+line(-1,-1).
 
-line(3, 3).
 col(-1,-1).
+
 
 %__________________Variaveis1_________________________________
 /*
@@ -69,11 +72,11 @@ line(7, 2).
 tents(N):-
     Lenght is N+1, % length fica N + 1 para facilitar utilização de nth
     init([], 1, 1, Lenght, 1, VarsEnd),
-    domain(VarsEnd, 0,1),
-    restrit(1,Lenght,VarsEnd),
-    nTents(VarsEnd),
-    tents2x2(2, Lenght, VarsEnd),nl,
-    palmeiraAdj(VarsEnd),
+    domain(VarsEnd, 0,1),!,
+   % restrit(1,Lenght,VarsEnd),!,
+    nTents(VarsEnd),!,
+    %tents2x2(2, Lenght, VarsEnd),!,
+    palmeiraAdj(VarsEnd),!,
     labeling([],VarsEnd ),
     showBoard(Lenght, VarsEnd),
     showResult(1, Lenght, VarsEnd).
@@ -126,9 +129,9 @@ init(Vars, L, C, N, Index, VarsEnd):-
 restrit(N, N, _).
 restrit(I, N, Vars):-
     ((line(I, VLine), findall(Index, cell(Index, I,_),ListLine), sumVars(ListLine,Vars,VLine,[]),
-      col(I, VCol), findall(Index, cell(Index, _,I), ListCol), sumVars(ListCol, Vars,VCol,[]));
-     (col(I, VCol), findall(Index, cell(Index, _,I), ListCol),  sumVars(ListCol, Vars,VCol,[]));
-     (line(I, VLine), findall(Index, cell(Index, I,_),ListLine), sumVars(ListLine,Vars,VLine,[]));
+      col(I, VCol),   findall(Index, cell(Index, _,I), ListCol), !,sumVars(ListCol, Vars,VCol,[]));
+     (col(I, VCol),   findall(Index, cell(Index, _,I), ListCol), !,sumVars(ListCol, Vars,VCol,[]));
+     (line(I, VLine), findall(Index, cell(Index, I,_),ListLine) ,!,sumVars(ListLine,Vars,VLine,[]));
 	 % write em branco no caso de não haver valor indicado p/ total de linha ou coluna
      write('')),
     NewI is I +1,
@@ -157,8 +160,8 @@ nTents(Vars):-
 
 % tents2x2: verifica se não há mais tendas no quadrado adjacente
 tents2x2(Lenght, Lenght, _).
-tents2x2(Li, Lenght, Vars):-
-    tents2x2Aux(Li, 2, Lenght, Vars),
+tents2x2(Li, Lenght, Vars):-!,
+    tents2x2Aux(Li, 2, Lenght, Vars),!,
     NewLine is Li +1,
     tents2x2(NewLine, Lenght, Vars).
 
@@ -178,7 +181,7 @@ tents2x2Aux(L,C, Lenght, Vars):-
       ((cell(Index2, Nort,C), nth1(Index2,Vars, Value2)); Value2=0),
       ((cell(Index3, L,West), nth1(Index3,Vars, Value3)); Value3=0),
       ((cell(Index4, Nort,West), nth1(Index4,Vars, Value4)); Value4=0)
-     ),
+     ),!,
 	 % valor máximo é 1 -> máximo de 1 tenda
      sum([Value1, Value2, Value3, Value4],#=<,1),
      Next is C+1,
@@ -207,7 +210,7 @@ palmeiraAdjAux([[L-C]|Palmeiras],Vars):-
       ((cell(Index2, South,C), nth1(Index2,Vars, Value2)); Value2=0),
       ((cell(Index3, L,Easth), nth1(Index3,Vars, Value3)); Value3=0),
       ((cell(Index4, L,West), nth1(Index4,Vars, Value4)); Value4=0)
-     ),
+     ),!,
 	% se não for encontrada uma tenda, o valor será zero
 	% soma >= 1 -> pelo menos uma tenda
     sum([Value1, Value2, Value3, Value4],#>=,1),
