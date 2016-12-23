@@ -92,9 +92,9 @@ init(Vars,L , N, N, I, VarsEnd):-
     init(Vars, NewLine, 1, N, I, VarsEnd).
 
 % init(Vars, Linha, Coluna, DimensãoMatriz, Index, VarsEnd)
+% LAZ explica sff o que fazemos ao certo com o Vars e o VarsEnd
 %vars---variaveis nao inicializadas,
-%varEnd--resultado das variaveis nao inicializadas, é onde vamos aplicar as restriçoes
-
+%varEnd--resultado das variaveis nao inicializadas, é onde vamos aplicar as restriçoes nesta variaveis
 init(Vars, L, C, N, Index, VarsEnd):-
 	% se não é palmeira e se não tem tenda
     (\+ (palmeira(L,C)), notTent(L, C, V),
@@ -145,7 +145,6 @@ nTents(Vars):-
 
 
 % tents2x2: verifica se não há mais tendas no quadrado adjacente
-
 tents2x2(Lenght, Lenght, _).
 tents2x2(Li, Lenght, Vars):-!,
     tents2x2Aux(Li, 2, Lenght, Vars),!,
@@ -174,11 +173,12 @@ tents2x2Aux(L,C, Lenght, Vars):-
      Next is C+1,
      tents2x2Aux(L,Next, Lenght, Vars).
 
-
+% 	:
 % à volta duma palmeira, tem de haver no mínimo uma tenda
 % procuramos as palmeiras todas e inserimos numa lista
-% recebe como parametro as palmeiras do board e as variaveis
-% verifica que tem que ter no minimo uma tenda ao lado dessa palmeira em especifico
+% LAZ explica o resto sff, não apontei muito bem (do palmeiraAdjAux
+%recebe como parametro as palmeiras do board e as variaveis
+%verifica que tem que ter no minimo uma tenda ao lado dessa palmeira em especifico
 
 palmeiraAdj(Vars):-
     findall([L-C], palmeira(L,C), Palmeiras),
@@ -202,7 +202,10 @@ palmeiraAdjAux([[L-C]|Palmeiras],Vars):-
     sum([Value1, Value2, Value3, Value4],#>=,1),
     palmeiraAdjAux(Palmeiras,Vars).
 
-% tentsLine: confirmar se o número de tendas bate certo com o valor declarado ao fim da linha
+% LAZ aqui é só para confirmar se o número de tendas bate certo com o valor declarado ao fim da linha?----
+%isto é para depois vermos o numero de casa sem tendas numa determinada linha, uso isto para aqueles numero que aparecem em baixo da solução do board
+% LAZ se sim, onde fazemos para a coluna?
+%quem faz isso é a função  restrit
 
 tentsLine(Vars, [], ListEnd, ListEnd).
 tentsLine(Vars,[[E-Col]|Indexs],List, ListEnd):-
@@ -227,12 +230,10 @@ showResult(Line, Lenght, Vars):-
     NewLine is Line +1,
     showResult(NewLine, Lenght, Vars).
 
-%showResultAux:
 % E é o primeiro elem. da lista (com tendas de cada linha)
 % vemos se cada elemento é maior do que -1, se for guardamos
-% (para cada linha)
+% para cada linha
 % write do resultado quando a lista é vazia
-
 showResultAux(E, Lenght, [], Maior):-
     Value is Lenght - E,
     (
